@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../Styles/dashboard.css';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     totalEmployees: 0,
     totalLetters: 0,
@@ -50,97 +53,97 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="p-8">
-        <div className="text-center">Loading dashboard...</div>
+      <div className="loading-container">
+        <div>Loading dashboard...</div>
       </div>
     );
   }
 
   return (
-    <div className="p-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600 mt-2">Welcome to your Letter Generator Dashboard</p>
+    <div className="dashboard-container">
+      <div className="dashboard-header">
+        <h1 className="dashboard-title">Dashboard</h1>
+        <p className="dashboard-subtitle">Welcome to your Letter Generator Dashboard</p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center">
-            <div className="p-3 bg-blue-100 rounded-full">
-              <span className="text-2xl">👥</span>
+      <div className="stats-grid">
+        <div className="stats-card">
+          <div className="stats-card-content">
+            <div className="stats-icon blue">
+              <span className="stats-icon-emoji">👥</span>
             </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Total Employees</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.totalEmployees}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center">
-            <div className="p-3 bg-green-100 rounded-full">
-              <span className="text-2xl">📝</span>
-            </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Letters Generated</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.totalLetters}</p>
+            <div className="stats-info">
+              <p className="stats-label">Total Employees</p>
+              <p className="stats-value">{stats.totalEmployees}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center">
-            <div className="p-3 bg-purple-100 rounded-full">
-              <span className="text-2xl">🏢</span>
+        <div className="stats-card">
+          <div className="stats-card-content">
+            <div className="stats-icon green">
+              <span className="stats-icon-emoji">📝</span>
             </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Company Profile</p>
-              <p className="text-sm font-bold text-green-600">Configured</p>
+            <div className="stats-info">
+              <p className="stats-label">Letters Generated</p>
+              <p className="stats-value">{stats.totalLetters}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center">
-            <div className="p-3 bg-orange-100 rounded-full">
-              <span className="text-2xl">📊</span>
+        <div className="stats-card">
+          <div className="stats-card-content">
+            <div className="stats-icon purple">
+              <span className="stats-icon-emoji">🏢</span>
             </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">This Month</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.recentLetters.length}</p>
+            <div className="stats-info">
+              <p className="stats-label">Company Profile</p>
+              <p className="stats-value green">Configured</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="stats-card">
+          <div className="stats-card-content">
+            <div className="stats-icon orange">
+              <span className="stats-icon-emoji">�</span>
+            </div>
+            <div className="stats-info">
+              <p className="stats-label">Generate Letter</p>
+              <button className="generate-letter-btn" onClick={() => navigate('/generate-certificate')}>
+                Create New
+              </button>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Recent Letters */}
-      <div className="bg-white rounded-lg shadow">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">Recent Letters</h2>
+      <div className="recent-letters-container">
+        <div className="recent-letters-header">
+          <h2 className="recent-letters-title">Recent Letters</h2>
         </div>
-        <div className="p-6">
+        <div className="recent-letters-content">
           {stats.recentLetters.length > 0 ? (
-            <div className="space-y-4">
+            <div className="letter-list">
               {stats.recentLetters.map((letter, index) => (
-                <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                  <div>
-                    <p className="font-medium text-gray-900">{letter.letterType}</p>
-                    <p className="text-sm text-gray-600">
+                <div key={index} className="letter-item">
+                  <div className="letter-info">
+                    <p className="letter-type">{letter.letterType}</p>
+                    <p className="letter-date">
                       Generated on {new Date(letter.generatedDate).toLocaleDateString()}
                     </p>
                   </div>
-                  <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                  <button className="download-btn">
                     Download
                   </button>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="text-center py-8">
-              <p className="text-gray-500">No letters generated yet</p>
-              <button className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-                Generate Your First Letter
+            <div className="empty-state">
+              <p className="empty-state-text">No letters generated yet</p>
+              <button className="generate-first-btn" onClick={() => navigate('/generate-certificate')}>
+                Generate Your First Certificate
               </button>
             </div>
           )}

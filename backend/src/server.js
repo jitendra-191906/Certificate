@@ -15,7 +15,7 @@ app.use('/uploads', express.static('uploads'));
 
 // Database Connection
 console.log('MongoDB URI:', process.env.MONGODB_URI);
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/letter-generator', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })

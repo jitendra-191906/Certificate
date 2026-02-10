@@ -16,10 +16,16 @@ const Navbar = ({ user, setUser }) => {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <h1 className="text-xl font-bold text-gray-800">
-              Letter Generator
+              Certificate Generator
             </h1>
           </div>
           <div className="flex items-center space-x-4">
+            <button
+              onClick={() => navigate('/company-profile')}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors mr-2"
+            >
+              Company Profile
+            </button>
             <span className="text-gray-600">Welcome, {user?.name}</span>
             <button
               onClick={handleLogout}

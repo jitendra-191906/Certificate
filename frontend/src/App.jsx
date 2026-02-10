@@ -1,43 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
-import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
+import CertificateGenerator from './components/CertificateGenerator';
 import CompanyProfile from './components/CompanyProfile';
-import Employees from './components/Employees';
-import GenerateLetter from './components/GenerateLetter';
-import LetterHistory from './components/LetterHistory';
+import Navbar from './components/Navbar';
+
 
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      // Verify token with backend
-      fetch('http://localhost:3001/api/auth/profile', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.user) {
-          setUser(data.user);
-        } else {
+    const checkAuth = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          // Verify token with backend
+          const response = await fetch('http://localhost:3001/api/auth/profile', {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          const data = await response.json();
+          if (data.user) {
+            setUser(data.user);
+          } else {
+            localStorage.removeItem('token');
+          }
+        } catch {
           localStorage.removeItem('token');
         }
-      })
-      .catch(() => {
-        localStorage.removeItem('token');
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-    } 
+      }
+      setLoading(false);
+    };
+
+    checkAuth();
   }, []);
 
   if (loading) {
@@ -53,8 +52,6 @@ function App() {
       <div className="min-h-screen bg-gray-50">
         {user && <Navbar user={user} setUser={setUser} />}
         <div className="flex">
-          {user && <Sidebar />}
-          <main className={`flex-1 ${user ? 'ml-64' : ''}`}>
             <Routes>
               <Route 
                 path="/login" 
@@ -69,27 +66,14 @@ function App() {
                 element={user ? <Dashboard /> : <Navigate to="/login" />} 
               />
               <Route 
+                path="/generate-certificate" 
+                element={user ? <CertificateGenerator /> : <Navigate to="/login" />} 
+              />
+              <Route 
                 path="/company-profile" 
                 element={user ? <CompanyProfile /> : <Navigate to="/login" />} 
               />
-              <Route 
-                path="/employees" 
-                element={user ? <Employees /> : <Navigate to="/login" />} 
-              />
-              <Route 
-                path="/generate-letter" 
-                element={user ? <GenerateLetter /> : <Navigate to="/login" />} 
-              />
-              <Route 
-                path="/letter-history" 
-                element={user ? <LetterHistory /> : <Navigate to="/login" />} 
-              />
-              <Route 
-                path="/" 
-                element={user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} 
-              />
             </Routes>
-          </main>
         </div>
       </div>
     </Router>

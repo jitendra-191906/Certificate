@@ -1,9 +1,30 @@
 const mongoose = require('mongoose');
 
 const employeeSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: [true, 'User ID is required']
+  },
   fullName: {
     type: String,
     required: [true, 'Full name is required'],
+    trim: true
+  },
+  employeeId: {
+    type: String,
+    required: [true, 'Employee ID is required'],
+    trim: true
+  },
+  email: {
+    type: String,
+    required: false,
+    lowercase: true,
+    trim: true
+  },
+  phone: {
+    type: String,
+    required: false,
     trim: true
   },
   designation: {
@@ -22,6 +43,19 @@ const employeeSchema = new mongoose.Schema({
   },
   endDate: {
     type: Date,
+    required: false
+  },
+  status: {
+    type: String,
+    enum: ['active', 'inactive', 'terminated'],
+    default: 'active'
+  },
+  salary: {
+    type: Number,
+    required: false
+  },
+  address: {
+    type: String,
     required: false
   },
   remarks: {
